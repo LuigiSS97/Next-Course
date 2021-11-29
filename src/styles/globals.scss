@@ -33,12 +33,12 @@
 html {
   background: var(--gray900);
   color: var(white);
-
 }
 
-body, input, textarea, select, button, p {
+body, input, textarea, select, button, p, h1 {
   font: 400 1rem "Roboto", sans-serif;
-
+  color: var(--white);
+  
   button {
     cursor: pointer;
   }
