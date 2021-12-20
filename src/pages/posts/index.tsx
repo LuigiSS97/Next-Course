@@ -1,4 +1,4 @@
-import { GetStaticProps } from "next";
+import { GetServerSideProps } from "next";
 import { useEffect, useState } from "react";
 import styles from "../../styles/home.module.scss";
 
@@ -25,14 +25,12 @@ export default function Posts({posts}: PostsProps) {
   );
 }
 
-export const getStaticProps: GetStaticProps<PostsProps> = async () => {
-  const response = await fetch("http://localhost:3333/posts")
-  const posts = await response.json()
-  
+export const getServerSideProps: GetServerSideProps<PostsProps> = async () => {
+  const response = await fetch("http://localhost:3333/posts");
+  const posts = await response.json();
   return {
     props: {
       posts,
     },
-    revalidate: 5,
   };
-}
+};
