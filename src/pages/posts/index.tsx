@@ -1,36 +1,72 @@
-import { GetServerSideProps } from "next";
-import { useEffect, useState } from "react";
-import styles from "../../styles/home.module.scss";
+import { GetStaticProps } from "next";
+import Prismic from "@prismicio/client";
+import Link from "next/link";
+import { RichText } from "prismic-dom";
+import { getPrismic } from "../../services/prismic";
+import SEO from "../../components/Header/SEO";
+import styles from "./posts.module.scss";
 
 interface Post {
-  id: string;
+  slug: string;
   title: string;
+  excerpt: string;
+  updateAt: string;
 }
 
 interface PostsProps {
   posts: Post[];
 }
 
-export default function Posts({posts}: PostsProps) {
+const { container } = styles;
 
+export default function Posts({ posts }: PostsProps) {
   return (
-    <div>
-     <h1>Listagem de posts</h1>
-     <ul>
+    <>
+      <SEO title="Posts" />
+      <main className={container}>
+        <div className={styles.posts}>
           {posts.map((post) => (
-            <li key={post.id} className={styles.list_item}>{post.title}</li>
+            <Link href={`/posts/${post.slug}`} key={post.slug}>
+              <a>
+                <time>{post.updateAt}</time>
+                <strong>{post.title}</strong>
+                <p>{post.excerpt}</p>
+              </a>
+            </Link>
           ))}
-        </ul>
-    </div>
+        </div>
+      </main>
+    </>
   );
 }
 
-export const getServerSideProps: GetServerSideProps<PostsProps> = async () => {
-  const response = await fetch("http://localhost:3333/posts");
-  const posts = await response.json();
+export const getStaticProps: GetStaticProps = async () => {
+  const prismic = getPrismic();
+
+  const response = await prismic.query(
+    [Prismic.predicates.at("document.type", "post")],
+    {
+      fetch: ["post.title", "post.content"],
+    }
+  );
+
+  const posts = response.results.map((post) => ({
+    slug: post.uid,
+    title: RichText.asText(post.data.title),
+    excerpt:
+      post.data.content.find((content) => content.type === "paragraph")?.text ??
+      "",
+    updateAt: new Date(post.last_publication_date).toLocaleDateString("pr-BR", {
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+    }),
+  }));
+
   return {
     props: {
       posts,
     },
+    revalidate: 60 * 60 * 12,
   };
 };

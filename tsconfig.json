@@ -22,8 +22,12 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-  ],
+, "src/tests/setupTests.js"  ],
   "exclude": [
     "node_modules"
-  ]
+  ],
+  "types": ["node", "jest", "@testing-library/jest-dom"],  
+  "setupFilesAfterEnv": [
+    "<rootDir>/support/setupTests.js"
+ ],
 }
