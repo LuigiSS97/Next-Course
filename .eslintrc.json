@@ -1,13 +1,12 @@
 {
-  "extends": "next/core-web-vitals",
+  "extends": ["next/core-web-vitals", "plugin:jsx-a11y/recommended"],
   "overrides": [
     {
-      "files": [
-        "**/*.test.js"
-      ],
+      "files": ["**/*.test.js"],
       "env": {
         "jest": true
       }
     }
-  ]
+  ],
+  "plugins": ["jsx-a11y"]
 }

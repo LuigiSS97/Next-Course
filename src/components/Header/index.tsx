@@ -8,7 +8,7 @@ export default function Header() {
     <header className={styles.container}>
       <div className={styles.content}>
         <Link href="/">
-          <Image src="/logo.svg" alt="DevNews!" width="6rem" height="3.75rem" />
+          <img src="/logo.svg" alt="DevNews!" width="6rem" height="3.75rem" />
         </Link>
 
         <nav>

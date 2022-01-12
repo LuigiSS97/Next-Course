@@ -1,19 +1,11 @@
 import { GetServerSideProps } from "next";
 import SEO from "../components/Header/SEO";
 import styles from "../styles/home.module.scss";
-
-interface Post {
-  id: string;
-  title: string;
-}
-
-interface HomeProps {
-  posts: Post[];
-}
+import Image from "next/image";
 
 const { content, section } = styles;
 
-export default function Home({ posts }: HomeProps) {
+export default function Home() {
   return (
     <>
       <SEO title="Home" />
@@ -30,7 +22,7 @@ export default function Home({ posts }: HomeProps) {
           </p>
         </section>
         <aside>
-          <img src="/home.svg" alt="Home Image" />
+          <Image src="/home.svg" alt="home page" />
         </aside>
       </main>
     </>
